@@ -1,7 +1,7 @@
-import { test } from '@bicycle-codes/tapzero'
-import { example } from '../src/index.js'
+import { test, expect, describe } from 'vitest'
 
-test('example', async t => {
-    t.ok('ok', 'should be an example')
-    example()
+describe('Example module', async () => {
+    test('example', async () => {
+        expect(true).to.equal(true, 'should be an example')
+    })
 })

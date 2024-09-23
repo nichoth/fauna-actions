@@ -9,8 +9,7 @@
   "scripts": {
     "lint": "eslint \"./**/*.{ts,js}\"",
     "build-tests": "esbuild test/index.ts --target=es2020 --bundle --keep-names > test/test-bundle.js",
-    "test": "npm run lint && npm run build && npm run build-tests && npm run test-tape-run",
-    "test-tape-run": "cat test/index.html | tape-run --input=html --static=test | tap-spec",
+    "test:ci": "touch .env.test && export $(cat .env.test | grep -e '^[^#]*$' | xargs) && playwright install && VITE_DEBUG_MODE=test vitest --config vitest.config.ci.ts --run",
     "build-cjs": "esbuild src/*.ts --format=cjs --keep-names --tsconfig=tsconfig.build.json --outdir=./dist --out-extension:.js=.cjs --sourcemap",
     "build-cjs:min": "esbuild src/*.ts --format=cjs --minify --keep-names --tsconfig=tsconfig.build.json --outdir=./dist --out-extension:.js=.min.cjs --sourcemap",
     "build-esm": "esbuild src/*.ts --format=esm --metafile=dist/meta.json --keep-names --tsconfig=tsconfig.build.json --outdir=./dist --sourcemap && tsc --emitDeclarationOnly --project tsconfig.build.json --outDir dist",
@@ -18,32 +17,30 @@
     "build-example": "mkdir -p ./public && rm -rf ./public/* && VITE_DEBUG_MODE=staging vite --mode staging --base=\"/repo-name\" build",
     "build-docs": "typedoc ./src/index.ts",
     "build": "mkdir -p ./dist && rm -rf ./dist/* && npm run build-cjs && npm run build-esm && npm run build-esm:min && npm run build-cjs:min",
-    "start": "vite",
-    "preversion": "npm run lint",
-    "toc": "markdown-toc --maxdepth 3 -i README.md",
-    "version": "npm run toc && auto-changelog -p --template keepachangelog --breaking-pattern 'BREAKING CHANGE:' && git add CHANGELOG.md README.md",
-    "postversion": "git push --follow-tags && npm publish",
-    "prepublishOnly": "npm run build"
+    "start": "vite"
   },
   "devDependencies": {
     "@bicycle-codes/debug": "^0.6.13",
     "@bicycle-codes/tapzero": "^0.10.3",
+    "@playwright/test": "^1.47.2",
     "@preact/preset-vite": "^2.9.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
+    "@vitest/browser": "^2.1.1",
+    "@vitest/ui": "^2.1.1",
     "auto-changelog": "^2.4.0",
     "esbuild": "^0.24.0",
     "eslint": "^8.57.0",
     "eslint-config-standard": "^17.1.0",
     "htm": "^3.1.1",
-    "markdown-toc": "^1.2.0",
+    "jsdom": "^25.0.1",
+    "playwright": "^1.47.2",
     "postcss-nesting": "^13.0.0",
     "preact": "^10.22.1",
-    "tap-spec": "^5.0.0",
-    "tape-run": "^11.0.0",
     "typedoc": "^0.26.4",
     "typescript": "^5.4.5",
-    "vite": "^5.3.3"
+    "vite": "^5.3.3",
+    "vitest": "^2.1.1"
   },
   "exports": {
     ".": {

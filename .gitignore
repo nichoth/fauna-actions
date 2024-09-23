@@ -3,6 +3,7 @@ bundle.js
 .DS_Store
 test/*.js
 dist
-.env
+.env*
 public
 docs
+html
